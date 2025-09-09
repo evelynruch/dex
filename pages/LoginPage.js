@@ -59,9 +59,7 @@ class LoginPage extends BasePage {
    * @param {string} username - Nombre de usuario
    */
   async fillUsername(username) {
-    await this.page.step('Fill username field', async () => {
-      await this.page.getByRole('textbox', { name: 'User' }).fill(username);
-    });
+    await this.page.getByRole('textbox', { name: 'User' }).fill(username);
   }
 
   /**
@@ -69,9 +67,7 @@ class LoginPage extends BasePage {
    * @param {string} password - Contraseña
    */
   async fillPassword(password) {
-    await this.page.step('Fill password field', async () => {
-      await this.page.getByRole('textbox', { name: 'Password' }).fill(password);
-    });
+    await this.page.getByRole('textbox', { name: 'Password' }).fill(password);
   }
 
   /**
@@ -94,12 +90,10 @@ class LoginPage extends BasePage {
    * @param {string} password - Contraseña
    */
   async performLogin(username, password) {
-    await this.page.step('Perform login with credentials', async () => {
-      await this.fillUsername(username);
-      await this.fillPassword(password);
-      await this.clickLoginButton();
-      await this.waitForPageLoad();
-    });
+    await this.fillUsername(username);
+    await this.fillPassword(password);
+    await this.clickLoginButton();
+    await this.waitForPageLoad();
   }
 
   /**
