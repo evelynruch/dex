@@ -3,10 +3,10 @@
  */
 class TestData {
   constructor() {
-    // Credenciales válidas
+    // Credenciales válidas (desde variables de entorno o valores por defecto)
     this.validCredentials = {
-      username: 'challengeqa',
-      password: 'Abcd1234'
+      username: process.env.LOGIN_USERNAME || 'challengeqa',
+      password: process.env.LOGIN_PASSWORD || 'Abcd1234'
     };
 
     // Credenciales inválidas
@@ -27,9 +27,9 @@ class TestData {
       password: 'b'.repeat(1000)
     };
 
-    // URLs
+    // URLs (desde variables de entorno o valores por defecto)
     this.urls = {
-      base: 'https://demo4.dexmanager.com',
+      base: process.env.BASE_URL || 'https://demo4.dexmanager.com',
       login: '/',
       forgotPassword: '/forgot-password'
     };
