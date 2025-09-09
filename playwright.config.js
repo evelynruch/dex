@@ -43,26 +43,35 @@ module.exports = defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      // Chrome ejecuta todos los tests
     },
 
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
+      // Firefox ejecuta solo tests críticos usando grep
+      grep: /@critical/,
     },
 
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
+      // Safari ejecuta solo tests críticos usando grep
+      grep: /@critical/,
     },
 
     /* Test contra navegadores móviles */
     {
       name: 'Mobile Chrome',
       use: { ...devices['Pixel 5'] },
+      // Mobile Chrome ejecuta solo tests críticos usando grep
+      grep: /@critical/,
     },
     {
       name: 'Mobile Safari',
       use: { ...devices['iPhone 12'] },
+      // Mobile Safari ejecuta solo tests críticos usando grep
+      grep: /@critical/,
     },
   ],
 

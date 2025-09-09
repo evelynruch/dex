@@ -25,7 +25,7 @@ test.describe('Automatización de Login - Demo4 DexManager (POM Optimizado)', ()
     await loginPage.gotoLoginPage();
   });
 
-  test('Verificar elementos de la página de login', async ({ page }) => {
+  test('Verificar elementos de la página de login @critical', async ({ page }) => {
     await allure.epic('Login Automation');
     await allure.feature('Login Page Validation');
     await allure.story('Verify Login Page Elements');
@@ -35,7 +35,7 @@ test.describe('Automatización de Login - Demo4 DexManager (POM Optimizado)', ()
     await testHelpers.verifyPageElements(loginPage, 'login-page-elements.png', 'Test de verificación de elementos');
   });
 
-  test('Login exitoso con credenciales válidas', async ({ page }) => {
+  test('Login exitoso con credenciales válidas @critical', async ({ page }) => {
     await allure.epic('Login Automation');
     await allure.feature('Successful Login');
     await allure.story('Valid Credentials Login');
@@ -63,7 +63,7 @@ test.describe('Automatización de Login - Demo4 DexManager (POM Optimizado)', ()
   });
 
   // Tests de validación de login fallido usando helper
-  test('Login fallido con campo de usuario vacío', async ({ page }) => {
+  test('Login fallido con campo de usuario vacío @critical', async ({ page }) => {
     await testHelpers.testFailedLogin(
       loginPage,
       () => loginPage.loginWithEmptyUsername(),
@@ -72,7 +72,7 @@ test.describe('Automatización de Login - Demo4 DexManager (POM Optimizado)', ()
     );
   });
 
-  test('Login fallido con campo de contraseña vacío', async ({ page }) => {
+  test('Login fallido con campo de contraseña vacío @critical', async ({ page }) => {
     await testHelpers.testFailedLogin(
       loginPage,
       () => loginPage.loginWithEmptyPassword(),
@@ -81,7 +81,7 @@ test.describe('Automatización de Login - Demo4 DexManager (POM Optimizado)', ()
     );
   });
 
-  test('Login fallido con credenciales incorrectas', async ({ page }) => {
+  test('Login fallido con credenciales incorrectas @critical', async ({ page }) => {
     await testHelpers.testFailedLogin(
       loginPage,
       () => loginPage.loginWithInvalidCredentials(),
@@ -90,7 +90,7 @@ test.describe('Automatización de Login - Demo4 DexManager (POM Optimizado)', ()
     );
   });
 
-  test('Test de funcionalidad Forgot Password', async ({ page }) => {
+  test('Test de funcionalidad Forgot Password @critical', async ({ page }) => {
     await loginPage.clickForgotPasswordButton();
     
     const hasServerError = await testHelpers.handleServerErrors(loginPage, 'forgot-password');
@@ -148,7 +148,7 @@ test.describe('Automatización de Login - Demo4 DexManager (POM Optimizado)', ()
     console.log('✅ Test de información del dashboard completado');
   });
 
-  test('Validaciones de backend durante login', async ({ page }) => {
+  test('Validaciones de backend durante login @critical', async ({ page }) => {
     const credentials = testData.getValidCredentials();
     
     console.log('🔍 Iniciando validaciones de backend...');

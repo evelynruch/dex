@@ -11,6 +11,10 @@
     "check-secrets": "node scripts/check-secrets.js",
     "test:with-check": "npm run check-secrets && playwright test",
     "test:allure": "playwright test && allure generate allure-results --clean -o allure-report && allure open allure-report",
+    "test:chrome": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:mobile": "playwright test --project=Mobile Chrome --project=Mobile Safari",
+    "test:critical": "playwright test --grep @critical",
     "allure:generate": "allure generate allure-results --clean -o allure-report",
     "allure:open": "allure open allure-report",
     "allure:serve": "allure serve allure-results"
