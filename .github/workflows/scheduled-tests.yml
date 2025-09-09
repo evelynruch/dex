@@ -1,0 +1,75 @@
+name: Scheduled Playwright Tests
+
+on:
+  schedule:
+    # Desarrollo diario: 9:00 AM UTC (6:00 AM Argentina) - Días laborables
+    - cron: '0 9 * * 1-5'
+    # Monitoreo continuo: Cada 6 horas
+    - cron: '0 */6 * * *'
+    # Reportes diarios: 6:00 PM UTC (3:00 PM Argentina) - Todos los días
+    - cron: '0 18 * * *'
+  # Permitir ejecución manual
+  workflow_dispatch:
+
+jobs:
+  scheduled-test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    
+    - name: Validate secrets
+      run: |
+        if [ -z "${{ secrets.LOGIN_USERNAME }}" ]; then
+          echo "❌ LOGIN_USERNAME secret is not set"
+          exit 1
+        fi
+        if [ -z "${{ secrets.LOGIN_PASSWORD }}" ]; then
+          echo "❌ LOGIN_PASSWORD secret is not set"
+          exit 1
+        fi
+        if [ -z "${{ secrets.BASE_URL }}" ]; then
+          echo "❌ BASE_URL secret is not set"
+          exit 1
+        fi
+        echo "✅ All secrets are configured"
+    
+    - name: Run Playwright tests (Scheduled - Critical Only)
+      run: npx playwright test --grep @critical
+      env:
+        LOGIN_USERNAME: ${{ secrets.LOGIN_USERNAME }}
+        LOGIN_PASSWORD: ${{ secrets.LOGIN_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+        PLAYWRIGHT_BROWSERS: 0
+    
+    - name: Generate Allure Report
+      if: always()
+      run: |
+        npx allure generate allure-results --clean -o allure-report
+        
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: scheduled-allure-report
+        path: allure-report/
+        retention-days: 30
+        
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: scheduled-playwright-report
+        path: playwright-report/
+        retention-days: 30
