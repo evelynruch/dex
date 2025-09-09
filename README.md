@@ -2,9 +2,19 @@
 
 Este proyecto automatiza el proceso de login en https://demo4.dexmanager.com/ usando Playwright.
 
-## Credenciales
-- **Usuario**: ****
-- **Contraseña**: ****
+## 🔐 Configuración de Secrets
+
+**IMPORTANTE**: Las credenciales se manejan de forma segura usando variables de entorno.
+
+### Para desarrollo local:
+1. Copia `env.example` a `.env`
+2. Configura tus credenciales en `.env`
+3. Verifica con: `npm run check-secrets`
+
+### Para GitHub Actions:
+Configura los secrets en: `Settings > Secrets and variables > Actions`
+
+Ver documentación completa en: [SECRETS_SETUP.md](SECRETS_SETUP.md)
 
 ## Estructura del Proyecto (Page Object Model - POM)
 
@@ -28,7 +38,13 @@ demo/
 │   ├── login-pom-optimized.spec.js # Test POM optimizado con backend
 │   ├── backend-validation.spec.js  # Tests específicos de backend
 │   └── example.spec.js      # Test de ejemplo
+├── scripts/                  # Scripts de utilidad
+│   └── check-secrets.js     # Verificación de secrets
+├── .github/workflows/        # GitHub Actions
+│   └── playwright.yml       # Workflow de CI/CD
 ├── screenshots/             # Directorio para capturas de pantalla
+├── env.example              # Ejemplo de variables de entorno
+├── SECRETS_SETUP.md         # Documentación de secrets
 └── README.md               # Este archivo
 ```
 
@@ -42,6 +58,17 @@ demo/
 2. **Instalar navegadores de Playwright**:
    ```bash
    npm run install
+   ```
+
+3. **Configurar variables de entorno**:
+   ```bash
+   cp env.example .env
+   # Edita .env con tus credenciales
+   ```
+
+4. **Verificar configuración**:
+   ```bash
+   npm run check-secrets
    ```
 
 ## Ejecución de Tests
@@ -84,6 +111,16 @@ npx playwright test tests/login-pom-optimized.spec.js
 ### Ejecutar tests específicos de backend
 ```bash
 npx playwright test tests/backend-validation.spec.js
+```
+
+### Verificar configuración de secrets
+```bash
+npm run check-secrets
+```
+
+### Ejecutar tests con verificación de secrets
+```bash
+npm run test:with-check
 ```
 
 ## Page Object Model (POM)
@@ -192,6 +229,41 @@ El test `login-pom.spec.js` incluye:
 7. **Validación de estructura JSON** - Verifica respuestas de API
 8. **Validación completa de backend** - Ejecuta todas las validaciones
 
+## 🚀 GitHub Actions (CI/CD)
+
+El proyecto incluye un workflow de GitHub Actions que ejecuta automáticamente los tests en cada push y pull request.
+
+### Configuración automática:
+- ✅ **Instalación de dependencias**
+- ✅ **Instalación de navegadores Playwright**
+- ✅ **Validación de secrets**
+- ✅ **Ejecución de tests**
+- ✅ **Generación de reportes**
+- ✅ **Subida de artifacts**
+
+### Configurar secrets en GitHub:
+1. Ve a: `Settings > Secrets and variables > Actions`
+2. Agrega estos secrets:
+   - `LOGIN_USERNAME`
+   - `LOGIN_PASSWORD`
+   - `BASE_URL`
+
+### Ver workflow:
+- Archivo: `.github/workflows/playwright.yml`
+- Se ejecuta en: push a `main`/`develop` y pull requests
+
+## 📊 Reportes y Artifacts
+
+### Reportes generados:
+- **HTML Report**: `playwright-report/`
+- **Screenshots**: `screenshots/`
+- **Videos**: `test-results/`
+- **Logs**: Consola de GitHub Actions
+
+### Artifacts en GitHub:
+- `playwright-report` - Reporte HTML completo
+- `test-results` - Videos y screenshots de fallos
+
 ## Screenshots
 
 El test genera automáticamente capturas de pantalla en el directorio `screenshots/`:
@@ -229,8 +301,27 @@ Después de ejecutar los tests, se genera un reporte HTML en el directorio `play
 - Chrome Mobile
 - Safari Mobile
 
-## Comandos Útiles
+## 📋 Comandos Disponibles
 
+### Tests y Verificación:
+```bash
+# Verificar configuración de secrets
+npm run check-secrets
+
+# Ejecutar tests con verificación
+npm run test:with-check
+
+# Ejecutar todos los tests
+npm test
+
+# Ejecutar tests con interfaz visual
+npm run test:headed
+
+# Ejecutar tests con UI de Playwright
+npm run test:ui
+```
+
+### Playwright Avanzado:
 ```bash
 # Ver todos los tests disponibles
 npx playwright test --list
@@ -243,4 +334,26 @@ npx playwright codegen https://demo4.dexmanager.com/
 
 # Abrir el inspector de Playwright
 npx playwright show-trace trace.zip
+
+# Ver reporte HTML
+npx playwright show-report
 ```
+
+### Desarrollo:
+```bash
+# Instalar dependencias
+npm install
+
+# Instalar navegadores Playwright
+npm run install
+
+# Configurar variables de entorno
+cp env.example .env
+```
+
+## 🔗 Enlaces Útiles
+
+- **Repositorio**: [https://github.com/evelynruch/dex](https://github.com/evelynruch/dex)
+- **Configuración de Secrets**: [SECRETS_SETUP.md](SECRETS_SETUP.md)
+- **Análisis POM**: [ANALISIS_POM.md](ANALISIS_POM.md)
+- **GitHub Actions**: `.github/workflows/playwright.yml`

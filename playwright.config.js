@@ -15,7 +15,14 @@ module.exports = defineConfig({
   /* Optar por no ejecutar tests en paralelo en CI */
   workers: process.env.CI ? 1 : undefined,
   /* Configuración de reportes */
-  reporter: 'html',
+  reporter: [
+    ['html'],
+    ['allure-playwright', { 
+      outputFolder: 'allure-results',
+      detail: true,
+      suiteTitle: false 
+    }]
+  ],
   /* Configuración global compartida para todos los proyectos */
   use: {
     /* URL base para usar en acciones como `await page.goto('/')` */

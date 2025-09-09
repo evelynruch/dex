@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const { allure } = require('allure-playwright');
 const LoginPage = require('../pages/LoginPage');
 const DashboardPage = require('../pages/DashboardPage');
 const TestData = require('../utils/TestData');
@@ -25,11 +26,21 @@ test.describe('Automatización de Login - Demo4 DexManager (POM Optimizado)', ()
   });
 
   test('Verificar elementos de la página de login', async ({ page }) => {
+    await allure.epic('Login Automation');
+    await allure.feature('Login Page Validation');
+    await allure.story('Verify Login Page Elements');
+    await allure.severity('critical');
+    
     await loginPage.verifyLoginPageElements();
     await testHelpers.verifyPageElements(loginPage, 'login-page-elements.png', 'Test de verificación de elementos');
   });
 
   test('Login exitoso con credenciales válidas', async ({ page }) => {
+    await allure.epic('Login Automation');
+    await allure.feature('Successful Login');
+    await allure.story('Valid Credentials Login');
+    await allure.severity('critical');
+    
     const credentials = testData.getValidCredentials();
     
     await loginPage.takeScreenshot('before-login.png');

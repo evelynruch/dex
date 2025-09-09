@@ -7,12 +7,25 @@
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
-    "install": "playwright install"
+    "install": "playwright install",
+    "check-secrets": "node scripts/check-secrets.js",
+    "test:with-check": "npm run check-secrets && playwright test",
+    "test:allure": "playwright test && allure generate allure-results --clean -o allure-report && allure open allure-report",
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report",
+    "allure:serve": "allure serve allure-results"
   },
-  "keywords": ["playwright", "automation", "login", "testing"],
+  "keywords": [
+    "playwright",
+    "automation",
+    "login",
+    "testing"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.40.0"
+    "@playwright/test": "^1.40.0",
+    "allure-commandline": "^2.34.1",
+    "allure-playwright": "^3.3.3"
   }
 }
