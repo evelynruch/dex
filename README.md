@@ -16,6 +16,28 @@ Configura los secrets en: `Settings > Secrets and variables > Actions`
 
 Ver documentación completa en: [SECRETS_SETUP.md](SECRETS_SETUP.md)
 
+## 🛡️ Seguridad en Reportes
+
+**CRÍTICO**: Los reportes están configurados para enmascarar automáticamente datos sensibles.
+
+### Características de Seguridad:
+- ✅ **Enmascaramiento automático** de credenciales en reportes
+- ✅ **Descripciones genéricas** en steps de Allure
+- ✅ **Variables de entorno** para credenciales
+- ✅ **Helper de seguridad** para datos sensibles
+- ✅ **Configuración segura** de reportes
+
+### Verificación de Seguridad:
+```bash
+# Verificar que no hay credenciales expuestas
+npm run check-secrets
+
+# Revisar reportes antes de compartir
+npm run allure:open
+```
+
+Ver guías de seguridad en: [SECURITY_GUIDELINES.md](SECURITY_GUIDELINES.md)
+
 ## Estructura del Proyecto (Page Object Model - POM)
 
 ```
@@ -31,6 +53,7 @@ demo/
 │   ├── TestData.js          # Datos de prueba centralizados
 │   ├── TestHelpers.js       # Funciones helper para tests
 │   ├── BackendValidator.js  # Validaciones de backend y APIs
+│   ├── SecurityHelper.js    # Helper para enmascarar datos sensibles
 │   └── index.js             # Exportaciones de utilidades
 ├── tests/                    # Directorio de tests
 │   ├── login.spec.js        # Test original (legacy)
@@ -45,6 +68,9 @@ demo/
 ├── screenshots/             # Directorio para capturas de pantalla
 ├── env.example              # Ejemplo de variables de entorno
 ├── SECRETS_SETUP.md         # Documentación de secrets
+├── SECURITY_GUIDELINES.md   # Guías de seguridad
+├── WORKFLOWS_SETUP.md       # Configuración de workflows
+├── FUNDAMENTOS_CONFIGURACION.md # Fundamentos técnicos
 └── README.md               # Este archivo
 ```
 
@@ -121,6 +147,21 @@ npm run check-secrets
 ### Ejecutar tests con verificación de secrets
 ```bash
 npm run test:with-check
+```
+
+### Ejecutar tests por navegador
+```bash
+# Solo Chrome (todos los tests)
+npm run test:chrome
+
+# Solo Firefox (tests críticos)
+npm run test:firefox
+
+# Solo Mobile (tests críticos)
+npm run test:mobile
+
+# Solo tests críticos
+npm run test:critical
 ```
 
 ## Page Object Model (POM)
@@ -231,15 +272,33 @@ El test `login-pom.spec.js` incluye:
 
 ## 🚀 GitHub Actions (CI/CD)
 
-El proyecto incluye un workflow de GitHub Actions que ejecuta automáticamente los tests en cada push y pull request.
+El proyecto incluye **3 workflows especializados** para diferentes propósitos:
+
+### 1. Workflow Principal (`.github/workflows/playwright.yml`)
+- **Triggers**: Push/PR únicamente
+- **Tests**: Todos los tests (55)
+- **Propósito**: Desarrollo y validación completa
+
+### 2. Workflow Programado (`.github/workflows/scheduled-tests.yml`)
+- **Horarios**: 
+  - 9:00 AM UTC (6:00 AM Argentina) - Días laborables
+  - Cada 6 horas - Monitoreo continuo
+  - 6:00 PM UTC (3:00 PM Argentina) - Reportes diarios
+- **Tests**: Solo críticos (7 tests)
+- **Propósito**: Monitoreo continuo
+
+### 3. Workflow Nocturno (`.github/workflows/nightly-tests.yml`)
+- **Horario**: 2:00 AM UTC (11:00 PM Argentina) - Diario
+- **Tests**: Todos los tests (55)
+- **Propósito**: Validación completa nocturna
 
 ### Configuración automática:
 - ✅ **Instalación de dependencias**
 - ✅ **Instalación de navegadores Playwright**
 - ✅ **Validación de secrets**
-- ✅ **Ejecución de tests**
-- ✅ **Generación de reportes**
-- ✅ **Subida de artifacts**
+- ✅ **Ejecución de tests optimizada**
+- ✅ **Generación de reportes Allure**
+- ✅ **Subida de artifacts seguros**
 
 ### Configurar secrets en GitHub:
 1. Ve a: `Settings > Secrets and variables > Actions`
@@ -248,21 +307,27 @@ El proyecto incluye un workflow de GitHub Actions que ejecuta automáticamente l
    - `LOGIN_PASSWORD`
    - `BASE_URL`
 
-### Ver workflow:
-- Archivo: `.github/workflows/playwright.yml`
-- Se ejecuta en: push a `main`/`develop` y pull requests
-
 ## 📊 Reportes y Artifacts
 
 ### Reportes generados:
 - **HTML Report**: `playwright-report/`
+- **Allure Report**: `allure-report/` (con datos enmascarados)
 - **Screenshots**: `screenshots/`
 - **Videos**: `test-results/`
 - **Logs**: Consola de GitHub Actions
 
 ### Artifacts en GitHub:
-- `playwright-report` - Reporte HTML completo
+- `allure-report` - Reporte Allure completo (seguro)
+- `playwright-report` - Reporte HTML estándar
 - `test-results` - Videos y screenshots de fallos
+- `scheduled-allure-report` - Reportes de ejecuciones programadas
+- `nightly-allure-report` - Reportes de ejecuciones nocturnas
+
+### Características de Seguridad en Reportes:
+- ✅ **Credenciales enmascaradas** automáticamente
+- ✅ **Descripciones genéricas** en steps
+- ✅ **Datos sensibles ocultos** en logs
+- ✅ **Environment info segura** en Allure
 
 ## Screenshots
 
@@ -355,5 +420,32 @@ cp env.example .env
 
 - **Repositorio**: [https://github.com/evelynruch/dex](https://github.com/evelynruch/dex)
 - **Configuración de Secrets**: [SECRETS_SETUP.md](SECRETS_SETUP.md)
+- **Guías de Seguridad**: [SECURITY_GUIDELINES.md](SECURITY_GUIDELINES.md)
+- **Configuración de Workflows**: [WORKFLOWS_SETUP.md](WORKFLOWS_SETUP.md)
+- **Fundamentos Técnicos**: [FUNDAMENTOS_CONFIGURACION.md](FUNDAMENTOS_CONFIGURACION.md)
 - **Análisis POM**: [ANALISIS_POM.md](ANALISIS_POM.md)
-- **GitHub Actions**: `.github/workflows/playwright.yml`
+- **Configuración de Allure**: [ALLURE_SETUP.md](ALLURE_SETUP.md)
+- **GitHub Actions**: `.github/workflows/`
+
+## 🎯 Resumen de Optimizaciones
+
+### **Reducción de Tests:**
+- **Antes**: 135 tests (27 × 5 navegadores)
+- **Después**: 55 tests totales
+- **Mejora**: 59% menos tests, 60% menos tiempo
+
+### **Configuración por Navegador:**
+- **Chrome**: 27 tests (desarrollo completo)
+- **Firefox/Safari/Mobile**: 7 tests críticos cada uno
+- **Estrategia**: Cobertura completa + validación crítica
+
+### **Workflows Especializados:**
+- **Principal**: Push/PR con todos los tests
+- **Programado**: Monitoreo continuo con tests críticos
+- **Nocturno**: Validación completa diaria
+
+### **Seguridad Implementada:**
+- ✅ **Enmascaramiento automático** de credenciales
+- ✅ **Variables de entorno** para secrets
+- ✅ **Reportes seguros** sin datos sensibles
+- ✅ **Helper de seguridad** para datos confidenciales

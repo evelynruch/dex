@@ -20,7 +20,13 @@ module.exports = defineConfig({
     ['allure-playwright', { 
       outputFolder: 'allure-results',
       detail: true,
-      suiteTitle: false 
+      suiteTitle: false,
+      // Enmascarar datos sensibles en reportes
+      environmentInfo: {
+        'Environment': 'Test',
+        'Browser': 'Chrome/Firefox/Safari',
+        'Credentials': '***MASKED***'
+      }
     }]
   ],
   /* Configuración global compartida para todos los proyectos */

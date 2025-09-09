@@ -1,9 +1,11 @@
 const { expect } = require('@playwright/test');
 const BasePage = require('./BasePage');
+const TestData = require('../utils/TestData');
 
 class LoginPage extends BasePage {
   constructor(page) {
     super(page);
+    this.testData = new TestData();
     
     // Selectores de elementos de la página de login
     this.selectors = {
@@ -57,7 +59,9 @@ class LoginPage extends BasePage {
    * @param {string} username - Nombre de usuario
    */
   async fillUsername(username) {
-    await this.page.getByRole('textbox', { name: 'User' }).fill(username);
+    await this.page.step('Fill username field', async () => {
+      await this.page.getByRole('textbox', { name: 'User' }).fill(username);
+    });
   }
 
   /**
@@ -65,7 +69,9 @@ class LoginPage extends BasePage {
    * @param {string} password - Contraseña
    */
   async fillPassword(password) {
-    await this.page.getByRole('textbox', { name: 'Password' }).fill(password);
+    await this.page.step('Fill password field', async () => {
+      await this.page.getByRole('textbox', { name: 'Password' }).fill(password);
+    });
   }
 
   /**
@@ -88,10 +94,12 @@ class LoginPage extends BasePage {
    * @param {string} password - Contraseña
    */
   async performLogin(username, password) {
-    await this.fillUsername(username);
-    await this.fillPassword(password);
-    await this.clickLoginButton();
-    await this.waitForPageLoad();
+    await this.page.step('Perform login with credentials', async () => {
+      await this.fillUsername(username);
+      await this.fillPassword(password);
+      await this.clickLoginButton();
+      await this.waitForPageLoad();
+    });
   }
 
   /**
@@ -191,7 +199,8 @@ class LoginPage extends BasePage {
    * Realizar login con credenciales válidas
    */
   async loginWithValidCredentials() {
-    await this.performLogin('challengeqa', 'Abcd1234');
+    const credentials = this.testData.getValidCredentials();
+    await this.performLogin(credentials.username, credentials.password);
   }
 
   /**
@@ -205,7 +214,8 @@ class LoginPage extends BasePage {
    * Realizar login con campo de usuario vacío
    */
   async loginWithEmptyUsername() {
-    await this.fillPassword('Abcd1234');
+    const credentials = this.testData.getValidCredentials();
+    await this.fillPassword(credentials.password);
     await this.clickLoginButton();
     await this.waitForPageLoad();
   }
@@ -214,7 +224,8 @@ class LoginPage extends BasePage {
    * Realizar login con campo de contraseña vacío
    */
   async loginWithEmptyPassword() {
-    await this.fillUsername('challengeqa');
+    const credentials = this.testData.getValidCredentials();
+    await this.fillUsername(credentials.username);
     await this.clickLoginButton();
     await this.waitForPageLoad();
   }
