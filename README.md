@@ -3,8 +3,8 @@
 Este proyecto automatiza el proceso de login en https://demo4.dexmanager.com/ usando Playwright.
 
 ## Credenciales
-- **Usuario**: challengeqa
-- **Contraseña**: Abcd1234
+- **Usuario**: ****
+- **Contraseña**: ****
 
 ## Estructura del Proyecto (Page Object Model - POM)
 
