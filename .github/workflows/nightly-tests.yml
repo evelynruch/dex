@@ -3,8 +3,7 @@ name: Nightly Full Test Suite
 on:
   schedule:
     # Ejecutar todas las noches a las 2:00 AM UTC (11:00 PM Argentina)
-    - cron: '0 2 * * *'
-  # Permitir ejecución manual
+    # Permitir ejecución manual
   workflow_dispatch:
 
 jobs:
